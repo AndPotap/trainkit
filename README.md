@@ -1,2 +1,2 @@
-# trainkit
+# TrainKit
 Utils from training models
