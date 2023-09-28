@@ -1,4 +1,15 @@
 import pickle
+import re
+
+
+def ask_save_output():
+    out = input("SAVE OUTPUT (Y/N) ")
+    save_output = bool(re.match(r"^[Yy]$", out.strip()))
+    if save_output:
+        print("Decided to save")
+    else:
+        print("Not saving")
+    return save_output
 
 
 def load_object(filepath):
