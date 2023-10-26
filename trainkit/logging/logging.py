@@ -30,9 +30,9 @@ def prepare_logger(log_dir):
     fh = logging.FileHandler(os.path.join(log_dir, "info.log"))
     fh.setLevel(logging.INFO)
     logger.addHandler(fh)
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
-    logger.addHandler(ch)
+    # ch = logging.StreamHandler()
+    # ch.setLevel(logging.INFO)
+    # logger.addHandler(ch)
     return logger
 
 
