@@ -1,5 +1,19 @@
+import datetime
+from pathlib import Path
 import pickle
 import re
+from random import randint
+
+
+def append_timestamp(filepath, add_random_suffix=False):
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%Y-%m-%d_%H%M")
+    if add_random_suffix:
+        timestamp += f"{randint(1, 10_000)}"
+    filepath = Path(filepath)
+    aux = f"{filepath.stem}_{timestamp}{filepath.suffix}"
+    new_filepath = filepath.with_name(aux)
+    return str(new_filepath)
 
 
 def ask_save_output():
