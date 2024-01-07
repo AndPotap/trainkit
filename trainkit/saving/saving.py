@@ -2,6 +2,7 @@ import datetime
 from pathlib import Path
 import pickle
 import re
+import yaml
 from random import randint
 
 
@@ -24,6 +25,17 @@ def ask_save_output():
     else:
         print("Not saving")
     return save_output
+
+
+def load_yml(filepath):
+    with open(file=filepath, mode='r') as file:
+        obj = yaml.safe_load(file)
+    return obj
+
+
+def save_yml(obj, filepath):
+    with open(file=filepath, mode='w') as file:
+        yaml.dump(obj, file)
 
 
 def load_object(filepath):
