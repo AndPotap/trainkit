@@ -1,5 +1,4 @@
-from .fns import pass_formatting
-from .fns import format_directory
+from .fns import format_directory, pass_formatting
 
 __all__ = [
     "pass_formatting",
