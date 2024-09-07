@@ -31,15 +31,16 @@ def get_min_df(df):
     return min_df
 
 
-def get_project_data(project, dynamic_vars, config_vars, steps=[-1], rerun_pull=False):
+def get_project_data(project, dynamic_vars, config_vars, rerun_pull=False):
     filepath = f"./logs/{project.replace('/', '_')}.csv"
     if os.path.exists(filepath) and not rerun_pull:
         print("Using existing table")
         df = pl.read_csv(filepath)
     else:
         print("Fetching")
-        df = get_wandb_df(project=project, config_vars=config_vars, dynamic_vars=dynamic_vars, steps=steps)
+        df = get_wandb_df(project=project, config_vars=config_vars, dynamic_vars=dynamic_vars)
         df.write_csv(filepath)
+        print(f"Saved in {filepath}")
     return df
 
 
