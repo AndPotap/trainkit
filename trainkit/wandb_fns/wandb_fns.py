@@ -56,7 +56,7 @@ def get_wandb_df(project, config_vars, dynamic_vars):
         aux.update({key: val for key, val in run.summary._json_dict.items() if key in dynamic_vars})
         data.append(aux)
 
-    runs_df = pl.DataFrame(data)
+    runs_df = pl.DataFrame(data, schema=["name", "state"] + dynamic_vars + config_vars)
     return runs_df
 
 
