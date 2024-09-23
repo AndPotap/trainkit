@@ -4,8 +4,8 @@ import re
 def importer(filepath):
     with open(filepath, mode="r") as f:
         lines = f.readlines()
-    _all_ = get_fn_or_class_names(lines)
     prefix = extract_prefix(filepath)
+    _all_ = get_fn_or_class_names(lines)
     out = create_import_str(prefix, _all_)
     all_str = create_all_str(_all_)
     return sum_lines(out, all_str, sep="")
@@ -41,7 +41,7 @@ def create_import_str(prefix, _all_):
 
 def get_fn_or_class_names(lines):
     pattern_fn = r"^def (\w+)\(*\)"
-    pattern_cls = r"^class (\w+):"
+    pattern_cls = r"^class (\w+)\(\w+\):"
     fns = []
     for line in lines:
         line = line.replace("\n", "")
