@@ -60,31 +60,30 @@ def get_wandb_df(project, config_vars, dynamic_vars):
     return runs_df
 
 
-def get_wandb_dynamic_df(project, config_vars, configs):
-    api = wandb.Api()
-    runs = api.runs(project)
+def get_wandb_dynamic_df(project, configs, filters):
+    api = wandb.Api(timeout=59)
+    runs = api.runs(project, filters=filters)
 
-    data, col_names = [], None
+    data, col_order = [], None
     for run in runs:
         all = {"name": run.name, "state": run.state}
-        all.update({key: val for key, val in run.config.items() if key in config_vars})
-        if run_selector_fn(all, configs):
-            print("Going over:")
-            print(all)
-            df = run.history()
-            df = pl.DataFrame(df)
-            for key, val in all.items():
-                df = df.with_columns(pl.lit(val).alias(key))
-            if col_names is None:
-                col_names = df.columns
-            data.append(df.select(col_names))
+        all.update({key: val for key, val in run.config.items() if key in configs})
+        print("Going over:")
+        print(all)
+        df = run.history()
+        df = pl.DataFrame(df)
+        for key, val in all.items():
+            df = df.with_columns(pl.lit(val).alias(key))
+        if col_order is None:
+            col_order = df.columns
+        data.append(df.select(col_order))
     data = pl.concat(data)
 
     return data
 
 
-def run_selector_fn(run_config, configs):
+def run_selector_fn(run_config, config_vals):
     checks = []
-    for case in configs:
+    for case in config_vals:
         checks.append(all([run_config[k] == val for k, val in case.items()]))
     return any(checks)
