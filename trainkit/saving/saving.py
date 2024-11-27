@@ -1,7 +1,7 @@
-import datetime
 import json
 import pickle
 import re
+from datetime import datetime
 from pathlib import Path
 from random import randint
 
@@ -9,7 +9,7 @@ import yaml
 
 
 def append_timestamp(filepath, add_random_suffix=False):
-    now = datetime.datetime.now()
+    now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d_%H%M%S")
     if add_random_suffix:
         timestamp += f"_r{randint(1, 1_000)}"
@@ -17,6 +17,29 @@ def append_timestamp(filepath, add_random_suffix=False):
     aux = f"{filepath.stem}_{timestamp}{filepath.suffix}"
     new_filepath = filepath.with_name(aux)
     return str(new_filepath)
+
+
+def find_latest(root, prefix=""):
+    files = [str(f) for f in root.iterdir()]
+    if len(prefix) > 0:
+        files = [f for f in files if prefix in f]
+    fmt = "%Y-%m-%d_%H%M%S"
+    pattern = r"\d{4}-\d{2}-\d{2}_\d{6}"
+
+    def extract_timestamp(file):
+        match = re.search(pattern, file)
+        if match:
+            return datetime.strptime(match.group(), fmt)
+        return None
+
+    filtered_files = []
+    for file in files:
+        match = extract_timestamp(file)
+        if match is not None:
+            filtered_files.append(file)
+
+    sorted_files = sorted(filtered_files, key=lambda x: extract_timestamp(x), reverse=True)
+    return sorted_files[0]
 
 
 def ask_save_output():
