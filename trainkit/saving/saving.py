@@ -19,7 +19,7 @@ def append_timestamp(filepath, add_random_suffix=False):
     return str(new_filepath)
 
 
-def find_latest(root, prefix=""):
+def sort_files(root, prefix=""):
     files = [str(f) for f in root.iterdir()]
     if len(prefix) > 0:
         files = [f for f in files if prefix in f]
@@ -39,7 +39,8 @@ def find_latest(root, prefix=""):
             filtered_files.append(file)
 
     sorted_files = sorted(filtered_files, key=lambda x: extract_timestamp(x), reverse=True)
-    return Path(sorted_files[0])
+    sorted_files = [Path(f) for f in sorted_files]
+    return sorted_files
 
 
 def ask_save_output():
