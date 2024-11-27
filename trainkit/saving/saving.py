@@ -39,7 +39,7 @@ def find_latest(root, prefix=""):
             filtered_files.append(file)
 
     sorted_files = sorted(filtered_files, key=lambda x: extract_timestamp(x), reverse=True)
-    return sorted_files[0]
+    return Path(sorted_files[0])
 
 
 def ask_save_output():
