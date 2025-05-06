@@ -1,4 +1,5 @@
 import json
+import os
 import pickle
 import re
 from datetime import datetime
@@ -86,3 +87,26 @@ def save_object(obj, filepath, use_highest=True):
     protocol = pickle.HIGHEST_PROTOCOL if use_highest else pickle.DEFAULT_PROTOCOL
     with open(file=filepath, mode="wb") as f:
         pickle.dump(obj=obj, file=f, protocol=protocol)
+
+
+def get_latest_folder(base_dir):
+    pattern = re.compile(r"(\d{4}-\d{2}-\d{2}_\d{6})")
+    timestamped_dirs = []
+
+    for name in os.listdir(base_dir):
+        full_path = os.path.join(base_dir, name)
+        if not os.path.isdir(full_path):
+            continue
+        match = pattern.search(name)
+        if match:
+            try:
+                ts = datetime.strptime(match.group(1), "%Y-%m-%d_%H%M%S")
+                timestamped_dirs.append((ts, full_path))
+            except ValueError:
+                continue
+
+    if not timestamped_dirs:
+        return None
+
+    latest_path = max(timestamped_dirs)[1]
+    return latest_path

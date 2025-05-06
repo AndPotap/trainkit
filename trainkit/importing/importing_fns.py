@@ -23,7 +23,7 @@ def create_all_str(_all_):
     end = "]\n"
     out = ""
     for el in _all_:
-        out += f"    \"{el}\",\n"
+        out += f'    "{el}",\n'
     final = sum_lines(sum_lines(start, out), end, sep="")
     return final
 
